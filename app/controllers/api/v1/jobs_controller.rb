@@ -25,16 +25,21 @@ class JobsController < ApplicationController
   # POST /jobs or /jobs.json
   def create
     @job = Job.new(job_params)
-
-    respond_to do |format|
-      if @job.save
-        format.html { redirect_to job_url(@job), notice: "Job was successfully created." }
-        format.json { render :show, status: :created, location: @job }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @job.errors, status: :unprocessable_entity }
-      end
+    if @job.save
+      render json: @job
+    else
+      render json: { error: @job.errors, status: :unprocessable_entity }
     end
+
+    # respond_to do |format|
+    #   if @job.save
+    #     format.html { redirect_to job_url(@job), notice: "Job was successfully created." }
+    #     format.json { render :show, status: :created, location: @job }
+    #   else
+    #     format.html { render :new, status: :unprocessable_entity }
+    #     format.json { render json: @job.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # PATCH/PUT /jobs/1 or /jobs/1.json
